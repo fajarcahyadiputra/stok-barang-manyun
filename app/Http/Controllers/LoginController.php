@@ -25,13 +25,7 @@ class LoginController extends Controller
         if ($data->status_aktif === 'tidak') {
             return back()->with('pesan', 'Your Account Is Not Active');
         }
-        if ($data->role === 'admin') {
-            return redirect()->route('dashboard');
-        } else if ($data->role === 'user') {
-            return redirect('/');
-        } else {
-            return abort(403, 'Who Are You');
-        }
+        return redirect()->route('dashboard');
     }
     public function logout()
     {

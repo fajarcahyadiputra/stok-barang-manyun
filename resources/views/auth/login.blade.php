@@ -10,7 +10,7 @@
     <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
     <meta name="author" content="">
     <link href="{{URL::asset('assets/ruangAdmin/img/logo/logo.png')}}" rel="icon">
-    <title>BengkelShop || Login Page</title>
+    <title>SPB || Login Page</title>
     <link href="{{URL::asset('assets/ruangAdmin/vendor/fontawesome-free/css/all.min.css')}}" rel="stylesheet" type="text/css">
     <link href="{{URL::asset('assets/ruangAdmin/vendor/bootstrap/css/bootstrap.min.css')}}" rel="stylesheet" type="text/css">
     <link href="{{URL::asset('assets/ruangAdmin/css/ruang-admin.min.css')}}" rel="stylesheet">
@@ -70,11 +70,12 @@
                     </a> --}}
                   </form>
                   <hr>
-                  <div class="text-center d-flex justify-content-around">
+                  {{-- <div class="text-center d-flex justify-content-around">
                     <a class="font-weight-bold small" href="{{route('register')}}">Create an Account!</a>
                     <a class="font-weight-bold small" href="register.html">Forget Password?</a>
-                  </div>
+                  </div> --}}
                   <div class="text-center">
+                    <span class="font-weight-bold">PT. CITRA LANGGENG SENTOSA</span>
                   </div>
                 </div>
               </div>

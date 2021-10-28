@@ -6,7 +6,7 @@
                     document.write(new Date().getFullYear());
 
                 </script> - developed by
-                <b><a href="" target="_blank">diri sendiri</a></b>
+                <b><a href="" target="_blank">Nur Oktapiani</a></b>
             </span>
         </div>
     </div>

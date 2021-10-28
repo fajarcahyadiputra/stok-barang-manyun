@@ -3,7 +3,7 @@
     <ul class="navbar-nav sidebar sidebar-light accordion" id="accordionSidebar">
         <a class="sidebar-brand d-flex align-items-center justify-content-center" style="background-color: skyblue;"
             href="/">
-            <div class="sidebar-brand-text mx-2 ">YOGAMOTOSHOP</div>
+            <div class="sidebar-brand-text mx-2 ">POS</div>
         </a>
         <li class="nav-item p-2" style="font-size: 15px">
             <center><b>ADMIN</b></center>
@@ -25,57 +25,45 @@
 
         <hr class="sidebar-divider">
 
-        <li class="nav-item {{ request()->is('kategori') ? 'active' : '' }}">
-            <a class="nav-link {{ request()->is('kategori') ? 'text-primary' : '' }}" href="/kategori">
-                <i class="fas fa-sitemap"></i>
-                <span>Kategori Barang</span></a>
-        </li>
-
-        <hr class="sidebar-divider">
-
         <li class="nav-item {{ request()->is('barang') ? 'active' : '' }}">
             <a class="nav-link {{ request()->is('barang') ? 'text-primary' : '' }}" href="/barang">
+                <i class="fas fa-sitemap"></i>
+                <span>Barang</span></a>
+        </li>
+
+        <hr class="sidebar-divider">
+
+        <li class="nav-item {{ request()->is('supplier') ? 'active' : '' }}">
+            <a class="nav-link {{ request()->is('supplier') ? 'text-primary' : '' }}" href="/supplier">
                 <i class="fas fa-boxes"></i>
-                <span>Data Barang</span></a>
+                <span>Supplier</span></a>
         </li>
 
 
         <hr class="sidebar-divider">
 
-        <li class="nav-item {{ request()->is('rekening') ? 'active' : '' }}">
-            <a class="nav-link {{ request()->is('rekening') ? 'text-primary' : '' }}" href="/rekening">
+        <li class="nav-item {{ request()->is('customer') ? 'active' : '' }}">
+            <a class="nav-link {{ request()->is('customer') ? 'text-primary' : '' }}" href="/customer">
                 <i class="fas fa-boxes"></i>
-                <span>Data Rekening</span></a>
+                <span>Customer</span></a>
         </li>
 
         <hr class="sidebar-divider">
 
-        <li class="nav-item {{ request()->is('transaksi') ? 'active' : '' }}">
-            <a class="nav-link {{ request()->is('transaksi') ? 'text-primary' : '' }}" href="/transaksi">
-                <i class="fas fa-shopping-cart"></i>
-                <span>Transaksi</span></a>
-        </li>
-
-
-
-
-        <!-- <li class="nav-item">
-      <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseBootstrap" aria-expanded="true" aria-controls="collapseBootstrap">
-        <i class="far fa-fw fa-window-maximize"></i>
-        <span>Data Barang</span>
-      </a>
-      <div id="collapseBootstrap" class="collapse" aria-labelledby="headingBootstrap" data-parent="#accordionSidebar">
-        <div class="bg-white py-2 collapse-inner rounded">
-          <h6 class="collapse-header">Data Barang</h6>
-          <a class="collapse-item" href="">Barang</a>
-          <a class="collapse-item" href="">Penyesuain Stok</a>
+        <li class="nav-item {{ request()->is('barang') AND request()->is('barang')  ? 'active' : '' }}">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseBootstrap" aria-expanded="true" aria-controls="collapseBootstrap">
+            <i class="far fa-fw fa-window-maximize"></i>
+            <span>Transaksi</span>
+        </a>
+        <div id="collapseBootstrap" class="collapse" aria-labelledby="headingBootstrap" data-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded">
+            <a class="collapse-item {{ request()->is('barang-masuk') ? 'text-primary' : '' }}" href="/barang-masuk">Barang Masuk</a>
+            <a class="collapse-item {{ request()->is('barang-keluar') ? 'text-primary' : '' }}" href="/barang-keluar">Barang Masuk</a>
+            </div>
         </div>
-      </div>
-    </li> -->
+        </li> 
 
         <hr class="sidebar-divider">
-
-
 
         <div class="version" id="version-ruangadmin"></div>
     </ul>
@@ -95,8 +83,8 @@
                     <li class="nav-item dropdown no-arrow">
                         <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                             data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <img class="img-profile rounded-circle" src="img/boy.png" style="max-width: 60px">
-                            <span class="ml-2 d-none d-lg-inline text-white small">fajar</span>
+                            <img class="img-profile rounded-circle" src="{{env('APP_URL'). auth()->user()->avatar}}" style="max-width: 60px">
+                            <span class="ml-2 d-none d-lg-inline text-white small">{{auth()->user()->nama}}</span>
                         </a>
                         <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
                             aria-labelledby="userDropdown">
