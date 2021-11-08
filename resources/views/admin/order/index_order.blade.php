@@ -1,13 +1,15 @@
 @extends('admin.layout')
-@section('title','Halaman User')
+@section('title','Halaman Order')
 @section('content')
 <!-- Container Fluid-->
 <div class="container-fluid" id="container-wrapper">
 
     <div class="card mb-3">
         <div class="card-header d-flex justify-content-between">
-            <h5>DATA USER</h5>
+            <h5>DATA ORDER</h5>
+            @if (auth()->user()->role === 'sales')
             <button data-toggle="modal" data-target="#modalTambahData" class="btn btn-success btn-sm">Tambah</button>
+            @endif
         </div>
         <div class="card-body">
             <div class="table-responsive">
@@ -15,27 +17,37 @@
                     <thead>
                         <tr>
                             <th>No</th>
-                            <th>Nama</th>
-                            <th>Email</th>
-                            <th>Role</th>
-                            <th>Status Aktif</th>
-                            <th>Avatar</th>
+                            <th>Nama Barang</th>
+                            <th>Customer</th>
+                            <th>Jumblah</th>
+                            <th>Status</th>
+                            <th>Keterangan</th>
+                            @if (auth()->user()->role != 'admin')
                             <th>Action</th>
+                            @endif
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach($users as $no=>$dt)
+                        @foreach($order as $no=>$dt)
                         <tr>
                             <td>{{$no+1}}</td>
-                            <td>{{$dt->nama}}</td>
-                            <td>{{$dt->email}}</td>
-                            <td>{{$dt->role}}</td>
-                            <td>{{$dt->status_aktif}}</td>
-                            <td><img width="150" src="{{env('APP_URL').$dt->avatar}}" alt="user image"></td>
+                            <td>{{$dt->Barang->nama_barang}}</td>
+                            <td>{{$dt->Customer->nama}}</td>
+                            <td>{{$dt->jumblah}}</td>
+                            <td><span style="background-color: green; padding: 5px; border-radius: 20px; color: white">{{$dt->status}}</span></td>
+                            <td>{{$dt->keterangan}}</td>
+                            @if (auth()->user()->role === 'sales')
                             <td class="text-center">
                                 <button data-id="{{$dt->id}}" id="btn-edit" class="btn btn-primary btn-sm"><i class="fa fa-edit"></i></button>
                                 <button data-id="{{$dt->id}}" id="btn-hapus" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></button>
                             </td>
+                            @endif
+                            @if (auth()->user()->role === 'gudang')
+                            <td class="text-center">
+                                <button data-id="{{$dt->id}}" id="btn-ready-stok" class="btn btn-primary btn-sm"><i class="fas fa-check-square"></i></button>
+                                <button data-id="{{$dt->id}}" id="btn-modal-stok" class="btn btn-warning btn-sm"><i class="far fa-calendar-times"></i></button>
+                            </td>
+                            @endif
                         </tr>
                         @endforeach
                     </tbody>
@@ -63,42 +75,34 @@
                 @csrf()
                 <div class="modal-body">
                     <div class="form-group">
-                        <label for="nama">Nama</label>
-                        <input type="type" name="nama" id="nama" class="form-control">
+                        <label for="invoice">Invoice</label>
+                        <input type="type" readonly value="{{$invoice}}" name="invoice" id="invoice" class="form-control">
                     </div>
                     <div class="form-group">
-                        <label for="email">Email</label>
-                        <input type="type" name="email" id="email" class="form-control">
-                    </div>
-                    <div class="form-group">
-                        <label for="level">Level</label>
-                        <select name="level" id="level" class="custom-select">
-                            <option value="" disabled hidden selected>-- Piliih Role --</option>
-                            <option value="admin">Admin</option>
-                            <option value="gudang">gudang</option>
-                            <option value="sales">Sales</option>
+                        <label>Customer</label>
+                        <select required class="custom-select" name="id_customer" id="id_customer">
+                            <option value="" disabled selected hidden>-- Select Email Customer --</option>
+                            @foreach ($customer as $cus)
+                            <option value="{{$cus->id}}">{{$cus->nama}}</option>
+                           @endforeach
                         </select>
                     </div>
                     <div class="form-group">
-                        <label for="status_aktif">Status Aktif</label>
-                        <select name="status_aktif" id="status_aktif" class="custom-select">
-                            <option value="" disabled hidden selected>-- Piliih Status Aktif --</option>
-                            <option value="aktif">Aktif</option>
-                            <option value="tidak">Tidak</option>
+                        <label for="id_barang">Barang</label>
+                        <select required class="custom-select" name="id_barang" id="id_barang">
+                            <option value="" disabled selected hidden>-- Select Barang --</option>
+                            @foreach ($barang as $bar)
+                            <option value="{{$bar->id}}">{{$bar->nama_barang}}</option>
+                           @endforeach
                         </select>
                     </div>
                     <div class="form-group">
-                        <label for="password">Password</label>
-                        <input type="type" name="password" id="password" class="form-control">
+                        <label for="jumblah">Jumblah</label>
+                        <input required type="type" name="jumblah" id="jumblah" class="form-control">
                     </div>
                     <div class="form-group">
-                        <label for="password_confirmation">Comfirm Password</label>
-                        <input type="password" id="password_confirmation"
-                            name="password_confirmation" class="form-control">
-                    </div>
-                    <div class="form-group">
-                        <label for="avatar">Avatar</label>
-                        <input type="file" name="avatar" id="avatar" class="form-control">
+                        <label for="keterangan">Keterangan</label>
+                        <textarea required class="form-control" name="keterangan" id="keterangan" cols="30" rows="3"></textarea>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -109,7 +113,6 @@
         </div>
     </div>
 </div>
-<!-- modal edit data -->
 <!-- Modal tambah -->
 <div class="modal fade" id="modalEdit" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
@@ -121,23 +124,25 @@
                 </button>
             </div>
             <form id="formEditData" method="post" enctype="multipart/form-data">
-
+                
             </form>
         </div>
     </div>
 </div>
-<!-- Modal detail -->
-<div class="modal fade" id="modalDetail" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<!-- Modal stok not ready -->
+<div class="modal fade" id="modalStokNotReady" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Edit Data</h5>
+                <h5 class="modal-title" id="exampleModalLabel">Stok Tidak tersedia, kasih keterangan</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <div class="modal-body detail-barang">
-
+            <div class="modal-body">
+                <form id="fromStokNotready" method="post">
+                   
+                </form>
             </div>
         </div>
     </div>
@@ -167,28 +172,12 @@
         //add data
         $(document).on('submit', '#formTambah',  function(e) {
             e.preventDefault();
-            const data = new FormData(document.querySelector('#formTambah'));
+            const data = $(this).serialize();
 
-            //check extensi avatar
-            const foto = $('#avatar').val();
-                if (!foto.match(/.(jpg|png|jpeg|gift)$/i)) {
-                    Swal.fire(
-                        'Opss',
-                        'extensi file anda salah',
-                        'warning'
-                    )
-                    return false;
-                }
-            
-            checkEmail($('#email').val());
             $.ajax({
-                url: '/user',
+                url: '/order',
                 data: data,
                 dataType: 'json',
-                processData: false,
-                contentType: false,
-                cache: false,
-                async: true,
                 type: 'post',
                 success: function(hasil) {
                     if (hasil) {
@@ -250,14 +239,13 @@
             }).then((result) => {
                 if (result.value) {
                     $.ajax({
-                        url: `/user/${id}`,
+                        url: `/order/${id}`,
                         method: 'delete',
                         data: {
                             "_token": "{{csrf_token()}}",
                         },
                         dataType: 'json',
                         success: function(hasil) {
-                            console.log(hasil);
                             if (hasil) {
                                 Swal.fire(
                                     'sukses',
@@ -283,7 +271,7 @@
         $(document).on('click', '#btn-edit', function() {
             const id = $(this).data('id');
             $.ajax({
-                url: `/user/${id}`,
+                url: `/order/${id}`,
                 method: 'GET',
                 dataType: 'json',
                 success: function(hasil) {
@@ -291,37 +279,35 @@
                     @csrf()
                     <div class="modal-body">
                     <div class="form-group">
-                        <label for="nama">Nama</label>
-                        <input type="type" name="nama" id="nama" value="${hasil.nama}" class="form-control">
-                        <input type="hidden" id="id" value="${hasil.id}">
+                        <label for="invoice">Invoice</label>
+                        <input type="type" readonly value="${hasil.invoice}" name="invoice" id="invoice" class="form-control">
+                        <input type="hidden"  value="${hasil.id}" id="id">
                     </div>
                     <div class="form-group">
-                        <label for="email">Email</label>
-                        <input type="type" name="email" id="email" value="${hasil.email}" class="form-control">
-                    </div>
-                    <div class="form-group">
-                        <label for="Role">Role</label>
-                        <select name="role" id="role" class="custom-select">
-                            <option value="" disabled hidden selected>-- Piliih Role --</option>
-                            <option ${hasil.role === 'gudang'?'selected':''} value="gudang">Super Admin</option>
-                            <option ${hasil.role === 'admin'?'selected':''} value="admin">Admin</option>
-                            <option ${hasil.role === 'sales'?'selected':''} value="sales">Sales</option>
+                        <label>Customer</label>
+                        <select required class="custom-select" name="id_customer" id="id_customer">
+                            <option value="" disabled selected hidden>-- Select Customer --</option>
+                            @foreach ($customer as $cus)
+                            <option ${hasil.id_customer === <?= $cus->id ?>?'selected':''} value="{{$cus->id}}">{{$cus->nama}}</option>
+                           @endforeach
                         </select>
                     </div>
                     <div class="form-group">
-                        <label for="status_aktif">Status Aktif</label>
-                        <select name="status_aktif" id="status_aktif" class="custom-select">
-                            <option value="" disabled hidden selected>-- Piliih Status Aktif --</option>
-                            <option ${hasil.status_aktif === 'aktif'?'selected':''} value="aktif">Aktif</option>
-                            <option ${hasil.status_aktif === 'tidak'?'selected':''} value="tidak">Tidak</option>
+                        <label for="id_barang">Barang</label>
+                        <select required class="custom-select" name="id_barang" id="id_barang">
+                            <option value="" disabled selected hidden>-- Select Barang --</option>
+                            @foreach ($barang as $bar)
+                            <option ${hasil.id_barang === <?= $bar->id ?>?'selected':''} value="{{$bar->id}}">{{$bar->nama_barang}}</option>
+                           @endforeach
                         </select>
                     </div>
                     <div class="form-group">
-                        <label class="d-block">Image</label>
-                        <img class="d-block" width="150" src="{{env('APP_URL')}}${hasil.avatar}" alt="image sub">
-                        <div id="box-image">
-                            <button type="button" id="btn-edit-image" class="mt-2 btn btn-primary btn-sm">Ganti gambar</button>
-                        </div>
+                        <label for="jumblah">Jumblah</label>
+                        <input type="number" value="${hasil.jumblah}" min="1" name="jumblah" id="jumblah" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label for="keterangan">Keterangan</label>
+                        <textarea class="form-control" name="keterangan" id="keterangan" cols="30" rows="3">${hasil.keterangan}</textarea>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -329,10 +315,6 @@
                     <button type="submit" class="btn btn-primary">Edit</button>
                 </div>
                `);
-                   $('#btn-edit-image').on('click', function() {
-                        $('#box-image').html(``);
-                        $('#box-image').html(`<input class="form-control-file mt-3" required="" type="file" name="avatar" class="form-control">`);
-                    })
                     $('#modalEdit').modal('show');
                 }
             })
@@ -340,33 +322,13 @@
         //edit data
         $(document).on('submit', '#formEditData', function(e) {
             e.preventDefault();
-            const data = new FormData(document.querySelector('#formEditData'));
-            data.append('_method', 'PUT')
-            //check extensi avatar
-            const foto = $('#avatar').val();
-            if(foto != undefined && foto != ""){
-                if (!foto.match(/.(jpg|png|jpeg|gift)$/i)) {
-                    Swal.fire(
-                        'Opss',
-                        'extensi file anda salah',
-                        'warning'
-                    )
-                    return false;
-                }
-            }
             const id = $('#id').val();
             $.ajax({
-                url: '/user/'+id,
-                data: data,
+                url: '/order/'+id,
+                data: $(this).serialize(),
                 dataType: 'json',
-                processData: false,
-                contentType: false,
-                cache: false,
-                async: true,
                 method: "PUT",
                 success: function(hasil) {
-                    console.log(hasil);
-                    return false;
                     if (hasil) {
                         $('#modalEdit').modal('hide');
                         Swal.fire(
@@ -387,6 +349,85 @@
                 }
             })
         })
+        //ajax jika stok ready
+        $(document).on('click', '#btn-ready-stok', function() {
+            const id = $(this).data('id');
+            $.ajax({
+                url: `/order/ready-stok/${id}`,
+                method: 'GET',
+                dataType: 'json',
+                success: function(hasil) {
+                    if (hasil) {
+                        Swal.fire(
+                            'sukses',
+                            'sukses ganti status ke stok tersedia',
+                            'success'
+                        )
+                    } else {
+                        Swal.fire(
+                            'Gagal',
+                            'gagal',
+                            'error'
+                        )
+                    }
+                    setTimeout(() => {
+                        location.reload();
+                    }, 800);
+                }
+            })
+        })
+        //end
+        //btn modal show modal stok
+        $(document).on('click', '#btn-modal-stok', function() {
+            const id = $(this).data('id');
+            $('#fromStokNotready').html(` @csrf
+            <div class="modal-body">
+                    <div class="form-group">
+                        <input type="hidden"  value="${id}" id="id">
+                        <label for="keterangan">Keterangan</label>
+                        <textarea class="form-control" name="keterangan" id="keterangan" cols="30" rows="3"></textarea>
+                    </div>
+                    </div>
+                    <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Edit</button>
+                </div>
+                    `);
+            $('#modalStokNotReady').modal('show')
+                
+        })
+        //end
+        //ajax jika stok tidak tersedia
+        $(document).on('submit', '#fromStokNotready', function(e) {
+            e.preventDefault();
+            const id = $('#id').val();
+            $.ajax({
+                url: '/order/stok-notready/'+id,
+                data: $(this).serialize(),
+                dataType: 'json',
+                method: "PUT",
+                success: function(hasil) {
+                    if (hasil) {
+                        $('#modalEdit').modal('hide');
+                        Swal.fire(
+                            'sukses',
+                            'sukses edit data',
+                            'success'
+                        )
+                    } else {
+                        Swal.fire(
+                            'Gagal',
+                            'gagal edit data',
+                            'error'
+                        )
+                    }
+                    setTimeout(() => {
+                        location.reload();
+                    }, 800);
+                }
+            })
+        })
+        //end
     })
 </script>
 

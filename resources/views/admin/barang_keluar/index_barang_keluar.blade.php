@@ -1,13 +1,15 @@
 @extends('admin.layout')
-@section('title','Halaman Barang Masuk')
+@section('title','Halaman Barang Keluar')
 @section('content')
 <!-- Container Fluid-->
 <div class="container-fluid" id="container-wrapper">
 
     <div class="card mb-3">
         <div class="card-header d-flex justify-content-between">
-            <h5>DATA BARANG MASUK</h5>
-           <a class="btn btn-primary"  href="{{route('tambah.barang-masuk')}}">Tambah</a>
+            <h5>DATA BARANG KELUAR</h5>
+            @if (auth()->user()->role === 'gudang')
+            <a class="btn btn-primary"  href="{{route('tambah.barang-keluar')}}">Tambah</a>
+            @endif
         </div>
         <div class="card-body">
             <div class="table-responsive">
@@ -18,26 +20,31 @@
                             <th>Nomer PO</th>
                             <th>Nomer SJ</th>
                             <th>Barang</th>
-                            <th>Customer</th>
-                            <th>Yang Mengeluarkan</th>
-                            <th>TGL Keluar</th>
+                            <th>Supplier</th>
+                            <th>Jumblah</th>
+                            <th>TGL Masuk</th>
                             <th>Action</th>
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach($barang_masuk as $no=>$dt)
+                        @foreach($barang_keluar as $no=>$dt)
                         <tr>
                             <td>{{$no+1}}</td>
                             <td>{{$dt->no_po}}</td>
                             <td>{{$dt->no_surat_jalan}}</td>
                             <td>{{$dt->Barang->nama_barang}}</td>
-                            <td>{{$dt->Supplier->nama}}</td>
+                            <td>{{$dt->Customer->nama}}</td>
                             <td>{{$dt->jumblah}}</td>
                             <td>{{$dt->created_at}}</td>
                             <td class="text-center">
-                                <a href="{{route('edit.barang_masuk', ['id' => $dt->id])}}" id="btn-edit" class="btn btn-primary btn-sm"><i class="fa fa-edit"></i></a>
+                                @if (auth()->user()->role === 'admin')
+                                <a target="_blank" href="{{route('suratjalan.barang-keluar', ['id' => $dt->id])}}" id="btn-edit" class="btn btn-warning btn-sm"><i class="fa fa-print"></i></a>
+                                @endif
+                                @if (auth()->user()->role === 'gudang')
+                                <a href="{{route('edit.barang-keluar', ['id' => $dt->id])}}" id="btn-edit" class="btn btn-primary btn-sm"><i class="fa fa-edit"></i></a>
                                 <button data-id="{{$dt->id}}" id="btn-hapus" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></button>
                                 <button data-id="{{$dt->id}}" id="btn-detail" class="btn btn-info btn-sm"><i class="fa fa-info"></i></button>
+                                @endif
                             </td>
                         </tr>
                         @endforeach
@@ -104,7 +111,7 @@
             }).then((result) => {
                 if (result.value) {
                     $.ajax({
-                        url: `/barang-masuk/${id}`,
+                        url: `/barang-keluar/${id}`,
                         method: 'delete',
                         data: {
                             "_token": "{{csrf_token()}}",
@@ -136,48 +143,63 @@
         $(document).on('click', '#btn-detail', function() {
             const id = $(this).data('id');
             $.ajax({
-                url: `/barang-masuk/${id}`,
+                url: `/barang-keluar/${id}`,
                 method: 'GET',
                 dataType: 'json',
                 success: function(hasil) {
                     $(`.detail-barang`).html(`
-                    <div class="modal-body">
-                    <div class="form-group">
-                        <label for="no_po">Nomer PO</label>
-                        <input readonly required name="no_po" id="no_po" value="${hasil.no_po}" class="form-control">
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="no_po">No PO</label>
+                                <input type="text" readonly name="no_po" readonly value="${hasil.no_po}" class="form-control">
+                            </div>
+                            <div class="form-group">
+                                <label for="no_po">No Surat jalan</label>
+                                <input type="text" name="no_surat_jalan" readonly value="${hasil.no_surat_jalan}" class="form-control">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="no_po">Tanggal Keluar</label>
+                                <input required type="text" readonly name="tgl_keluar"  value="${hasil.created_at}" class="form-control">
+                            </div>
+                            <div class="form-group">
+                                <label for="yg_mengeluarkan">Yang Mengeluarkan</label>
+                                <input readonly required type="text"  value="${hasil.yg_mengeluarkan}" name="yg_mengeluarkan" id="yg_mengeluarkan"  class="form-control">
+                            </div>
+                        </div>
                     </div>
                     <div class="form-group">
-                        <label for="no_surat_jalan">Nomer Surat Jalan</label>
-                        <input readonly required value="${hasil.no_surat_jalan}"  class="form-control">
+                        <label>Customer</label>
+                        <input readonly type="text"  value="${hasil.customer.nama}" name="sisa_stok" id="sisa_stok" min="1" class="form-control">
                     </div>
                     <div class="form-group">
                         <label for="id_barang">Barang</label>
-                        <input readonly required value="${hasil.barang.nama_barang}"  class="form-control">
+                        <input readonly type="text" value="${hasil.barang.nama_barang}"  name="sisa_stok" id="sisa_stok" min="1" class="form-control">
                     </div>
                     <div class="form-group">
-                        <label for="id_supplier">Supplier</label>
-                        <input readonly required value="${hasil.supplier.nama}"  class="form-control">
-                    </div>
-                    <div class="form-group">
-                        <label for="penerima">Penerima</label>
-                        <input readonly required value="${hasil.penerima}"  class="form-control">
-                    </div>
-                    <div class="form-group">
-                        <label>Jumblah Masuk</label>
-                        <input readonly required value="${hasil.jumblah}"  class="form-control">
+                        <label>Jumblah</label>
+                        <input required type="number"  value="${hasil.jumblah}" readonly name="jumblah" id="jumblah" min="1" value="" class="form-control">
+                        <span class="alert-barang-kosong text-danger"></span>
                     </div>
                     <div class="form-group">
                         <label>Jumblah Sebelumnya</label>
-                        <input readonly required value="${hasil.jumblah_sebelumnya}"  class="form-control">
+                        <input readonly type="number"  value="${hasil.jumblah_sebelumnya}"  name="jumblah_sebelumnya" id="jumblah_sebelumnya" min="1" class="form-control">
                     </div>
                     <div class="form-group">
-                        <label>Jumblah Setelahnya</label>
-                        <input readonly required value="${hasil.total_stok}"  class="form-control">
+                        <label>Sisa Stok</label>
+                        <input readonly type="number"  value="${hasil.sisa_stok}"  name="sisa_stok" id="sisa_stok" min="1" class="form-control">
                     </div>
                     <div class="form-group">
-                        <label>TGL Masuk</label>
-                        <input readonly required value="${hasil.created_at}"  class="form-control">
+                        <label id="satuan">Satuan</label>
+                        <input readonly type="text"  value="${hasil.satuan}"  name="sisa_stok" id="sisa_stok" min="1" class="form-control">
                     </div>
+                </div>
+                <div class="modal-footer">
+                    <a class="btn btn-secondary" href="/barang-keluar">Cancle</a>
+                    <button type="submit" class="btn btn-primary">Edit</button>
                 </div>
                `);
                     $('#modalDetail').modal('show');

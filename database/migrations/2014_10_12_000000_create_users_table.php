@@ -18,7 +18,7 @@ class CreateUsersTable extends Migration
             $table->string('nama', 50);
             $table->string('email', 100);
             $table->string('password', 200);
-            $table->enum('role', ['user', 'admin'])->default('user');
+            $table->enum('role', ['user', 'super-admin', 'gudang', 'sales'])->default('user');
             $table->enum('status_aktif', ['aktif', 'tidak'])->default('aktif');
             $table->string('avatar', 100)->nullable();
             $table->timestamps();

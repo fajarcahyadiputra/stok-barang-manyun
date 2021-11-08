@@ -7,7 +7,9 @@
     <div class="card mb-3">
         <div class="card-header d-flex justify-content-between">
             <h5>DATA BARANG</h5>
+            @if(auth()->user()->role == 'super-admin')
             <button data-toggle="modal" data-target="#modalTambahData" class="btn btn-success btn-sm">Tambah</button>
+            @endif
         </div>
         <div class="card-body">
             <div class="table-responsive">
@@ -19,7 +21,9 @@
                             <th>Jumblah</th>
                             <th>Keterangan</th>
                             <th>Satuan</th>
+                            @if(auth()->user()->role == 'super-admin')
                             <th>Action</th>
+                            @endif
                         </tr>
                     </thead>
                     <tbody>
@@ -30,10 +34,12 @@
                             <td>{{$dt->jumblah}}</td>
                             <td>{{$dt->keterangan}}</td>
                             <td>{{$dt->satuan}}</td>
+                            @if(auth()->user()->role == 'super-admin')
                             <td class="text-center">
                                 <button data-id="{{$dt->id}}" id="btn-edit" class="btn btn-primary btn-sm"><i class="fa fa-edit"></i></button>
                                 <button data-id="{{$dt->id}}" id="btn-hapus" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></button>
                             </td>
+                            @endif
                         </tr>
                         @endforeach
                     </tbody>

@@ -6,11 +6,10 @@
 
         <div class="card">
             <div class="card-header" style="background-color: mintcream">
-                <h3 class="text-dark">DASHBOARD</h3>
+                {{-- <h3 class="text-dark">DASHBOARD</h3> --}}
             </div>
             <div class="card-body">
-
-                <div class="container-fluid">
+                {{-- <div class="container-fluid">
                     <div class="card mb-5">
                         <div class="card-body">
                             <div class="row">
@@ -62,6 +61,15 @@
                             </div>
                         </div>
                     </div>
+                </div> --}}
+                <div class="jumbotron">
+                    <h1 class="display-4">
+                        <h1 align="center" style="font-weight: bold">Selamat Datang {{auth()->user()->nama}}</h1>
+                    </h1>
+                    <hr>
+                    <h3 align="center">Aplikasi manajemen Stok Barang<br /></h3>
+                    <h3 align="center">PT. CITRA LANGGENG SENTOSA<br /></h3>
+                    <hr class="my-4">
                 </div>
             </div>
         </div>

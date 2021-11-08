@@ -6,15 +6,15 @@
             <div class="sidebar-brand-text mx-2 ">POS</div>
         </a>
         <li class="nav-item p-2" style="font-size: 15px">
-            <center><b>ADMIN</b></center>
+            <center><b><p style="font-size: 10px">PT. CITRA LANGGENG SENTOSA</p></b></center>
         </li>
         <hr class="sidebar-divider">
-        <li class="nav-item {{ request()->is('/home') ? 'active' : '' }}">
-            <a class="nav-link {{ request()->is('/home') ? 'text-primary' : '' }}" href="/home">
+        <li class="nav-item {{ request()->is('home') ? 'active' : '' }}">
+            <a class="nav-link {{ request()->is('home') ? 'text-primary' : '' }}" href="/home">
                 <i class="fas fa-fw fa-tachometer-alt"></i>
                 <span>Dashboard</span></a>
         </li>
-
+        @if (auth()->user()->role === 'super-admin')
         <hr class="sidebar-divider">
 
         <li class="nav-item {{ request()->is('user') ? 'active' : '' }}">
@@ -50,7 +50,7 @@
 
         <hr class="sidebar-divider">
 
-        <li class="nav-item {{ request()->is('barang') AND request()->is('barang')  ? 'active' : '' }}">
+        <li class="nav-item">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseBootstrap" aria-expanded="true" aria-controls="collapseBootstrap">
             <i class="far fa-fw fa-window-maximize"></i>
             <span>Transaksi</span>
@@ -58,12 +58,112 @@
         <div id="collapseBootstrap" class="collapse" aria-labelledby="headingBootstrap" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
             <a class="collapse-item {{ request()->is('barang-masuk') ? 'text-primary' : '' }}" href="/barang-masuk">Barang Masuk</a>
-            <a class="collapse-item {{ request()->is('barang-keluar') ? 'text-primary' : '' }}" href="/barang-keluar">Barang Masuk</a>
+            <a class="collapse-item {{ request()->is('barang-keluar') ? 'text-primary' : '' }}" href="/barang-keluar">Barang Keluar</a>
             </div>
         </div>
         </li> 
 
         <hr class="sidebar-divider">
+
+        <li class="nav-item {{ request()->is('laporan') ? 'active' : '' }}">
+            <a class="nav-link {{ request()->is('laporan') ? 'text-primary' : '' }}" href="/laporan">
+                <i class="fas fa-boxes"></i>
+                <span>laporan</span></a>
+        </li>
+
+        <hr class="sidebar-divider">
+        @endif
+
+        @if (auth()->user()->role === 'sales')
+        <hr class="sidebar-divider">
+
+        <li class="nav-item {{ request()->is('customer') ? 'active' : '' }}">
+            <a class="nav-link {{ request()->is('customer') ? 'text-primary' : '' }}" href="/customer">
+                <i class="fas fa-boxes"></i>
+                <span>Customer</span></a>
+        </li>
+        <hr class="sidebar-divider">
+        <li class="nav-item">
+            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseBootstrap" aria-expanded="true" aria-controls="collapseBootstrap">
+                <i class="far fa-fw fa-window-maximize"></i>
+                <span>Transaksi</span>
+            </a>
+            <div id="collapseBootstrap" class="collapse" aria-labelledby="headingBootstrap" data-parent="#accordionSidebar">
+                <div class="bg-white py-2 collapse-inner rounded">
+                <a class="collapse-item {{ request()->is('order') ? 'text-primary' : '' }}" href="/order">Tambah Order</a>
+            </div>
+            </div>
+            </li> 
+    
+            <hr class="sidebar-divider">
+        @endif
+
+        @if (auth()->user()->role === 'admin')
+        <hr class="sidebar-divider">
+        <li class="nav-item {{ request()->is('order') ? 'active' : '' }}">
+            <a class="nav-link {{ request()->is('order') ? 'text-primary' : '' }}" href="/order">
+                <i class="fas fa-sitemap"></i>
+                <span>Order</span></a>
+        </li>
+        <hr class="sidebar-divider">
+        <li class="nav-item">
+            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseBootstrap" aria-expanded="true" aria-controls="collapseBootstrap">
+                <i class="far fa-fw fa-window-maximize"></i>
+                <span>Transaksi</span>
+            </a>
+            <div id="collapseBootstrap" class="collapse" aria-labelledby="headingBootstrap" data-parent="#accordionSidebar">
+                <div class="bg-white py-2 collapse-inner rounded">
+                <a class="collapse-item {{ request()->is('barang-masuk') ? 'text-primary' : '' }}" href="/barang-masuk">Barang Masuk</a>
+                <a class="collapse-item {{ request()->is('barang-keluar') ? 'text-primary' : '' }}" href="/barang-keluar">Barang Keluar</a>
+                </div>
+            </div>
+            </li> 
+    
+            <hr class="sidebar-divider">
+    
+            <li class="nav-item {{ request()->is('laporan') ? 'active' : '' }}">
+                <a class="nav-link {{ request()->is('laporan') ? 'text-primary' : '' }}" href="/laporan">
+                    <i class="fas fa-boxes"></i>
+                    <span>laporan</span></a>
+            </li>
+            <hr class="sidebar-divider">
+        @endif
+
+        @if (auth()->user()->role === 'gudang')
+        <hr class="sidebar-divider">
+        <li class="nav-item {{ request()->is('barang') ? 'active' : '' }}">
+            <a class="nav-link {{ request()->is('barang') ? 'text-primary' : '' }}" href="/barang">
+                <i class="fas fa-sitemap"></i>
+                <span>Barang</span></a>
+        </li>
+        <hr class="sidebar-divider">
+        <li class="nav-item {{ request()->is('order') ? 'active' : '' }}">
+            <a class="nav-link {{ request()->is('order') ? 'text-primary' : '' }}" href="/order">
+                <i class="fas fa-sitemap"></i>
+                <span>Order</span></a>
+        </li>
+        <hr class="sidebar-divider">
+        <li class="nav-item">
+            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseBootstrap" aria-expanded="true" aria-controls="collapseBootstrap">
+                <i class="far fa-fw fa-window-maximize"></i>
+                <span>Transaksi</span>
+            </a>
+            <div id="collapseBootstrap" class="collapse" aria-labelledby="headingBootstrap" data-parent="#accordionSidebar">
+                <div class="bg-white py-2 collapse-inner rounded">
+                <a class="collapse-item {{ request()->is('barang-keluar') ? 'text-primary' : '' }}" href="/barang-keluar">Barang Keluar</a>
+                </div>
+            </div>
+            </li> 
+    
+            <hr class="sidebar-divider">
+    
+            <li class="nav-item {{ request()->is('laporan') ? 'active' : '' }}">
+                <a class="nav-link {{ request()->is('laporan') ? 'text-primary' : '' }}" href="/laporan">
+                    <i class="fas fa-boxes"></i>
+                    <span>laporan</span></a>
+            </li>
+            <hr class="sidebar-divider">
+        @endif
 
         <div class="version" id="version-ruangadmin"></div>
     </ul>

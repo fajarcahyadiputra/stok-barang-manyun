@@ -12,8 +12,8 @@ class Barang extends Model
     protected $table = 'barang';
     protected $fillable = ['nama_barang', 'jumblah', 'keterangan', 'satuan'];
     protected $casts = [
-        'created_at' => 'datetime',
-        'updated_at' => 'datetime',
+        'created_at' => 'datetime:Y-m-d H:i:s',
+        'updated_at' => 'datetime:Y-m-d H:i:s',
     ];
     public static function generateKode()
     {

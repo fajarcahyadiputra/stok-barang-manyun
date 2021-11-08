@@ -4,15 +4,16 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class BarangKeluar extends Model
 {
     use HasFactory;
     protected $table = 'barang_keluar';
-    protected $fillable = ['id_barang', 'id_customer', 'satuan', 'jumblah', 'yg_mengeluarkan'];
+    protected $fillable = ['id_barang', 'id_customer', 'satuan', 'jumblah', 'yg_mengeluarkan', 'sisa_stok', 'no_po', 'no_surat_jalan', 'jumblah_sebelumnya'];
     protected $casts = [
-        'created_at' => 'datetime',
-        'updated_at' => 'datetime',
+        'created_at' => 'datetime:Y-m-d H:i:s',
+        'updated_at' => 'datetime:Y-m-d H:i:s',
     ];
     public function barang()
     {
@@ -21,5 +22,36 @@ class BarangKeluar extends Model
     public function customer()
     {
         return $this->belongsTo(Customer::class, 'id_customer');
+    }
+    public static function generateNoPo()
+    {
+        $kode_max = DB::select("SELECT MAX(RIGHT(no_po,4)) as kode_max FROM barang_keluar");
+        if ($kode_max) {
+            $kode_max =  collect($kode_max)->pluck('kode_max')->toArray()[0];
+            $kode_interval =  (int) $kode_max + 1;
+        } else {
+            $kode_interval =  1;
+        }
+        return 'BPO' . str_pad($kode_interval, 4, '0', STR_PAD_LEFT);
+    }
+    public static function generateSJ()
+    {
+        $kode_max = DB::select("SELECT MAX(RIGHT(no_surat_jalan,4)) as kode_max FROM barang_keluar");
+        if ($kode_max) {
+            $kode_max =  collect($kode_max)->pluck('kode_max')->toArray()[0];
+            $kode_interval =  (int) $kode_max + 1;
+        } else {
+            $kode_interval =  1;
+        }
+        return 'SJB' . str_pad($kode_interval, 4, '0', STR_PAD_LEFT);
+    }
+    public static function laporan($dari, $sampai)
+    {
+        return DB::table('barang_keluar')
+            ->select("barang_keluar.*", "barang.nama_barang", "customer.nama")
+            ->join('barang', "barang_keluar.id_barang", "=", "barang.id")
+            ->join('customer', "barang_keluar.id_customer", "=", "customer.id")
+            ->whereBetween('barang_keluar.created_at', [$dari, $sampai])
+            ->get();
     }
 }

@@ -17,11 +17,12 @@ class CreateBarangKeluarTable extends Migration
             $table->id();
             $table->integer('id_barang');
             $table->integer('id_customer');
-            $table->integer('no_po');
-            $table->integer('no_surat_jalan');
+            $table->string('no_po');
+            $table->string('no_surat_jalan');
             $table->enum('satuan', ['pcs', 'lb', 'btg']);
             $table->integer('jumblah');
             $table->integer('sisa_stok');
+            $table->integer('jumblah_sebelumnya');
             $table->string('yg_mengeluarkan', 100);
             $table->timestamps();
         });
