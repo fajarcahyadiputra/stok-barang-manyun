@@ -25,7 +25,8 @@ class BarangMasukController extends Controller
     {
         $barang = Barang::all();
         $supplier = Supplier::all();
-        return view('admin.barang_masuk.create_barang_masuk', compact('barang', 'supplier'));
+        $kode_barang = Barang::generateKode();
+        return view('admin.barang_masuk.create_barang_masuk', compact('barang', 'supplier', 'kode_barang'));
     }
     public function store(Request $request)
     {
@@ -49,9 +50,14 @@ class BarangMasukController extends Controller
     }
     public function destroy($id)
     {
-        $barang = BarangMasuk::find($id);
-        if ($barang) {
-            $barang->delete();
+        $barangMasuk = BarangMasuk::find($id);
+        if ($barangMasuk) {
+            $barang = Barang::find($barangMasuk->id_barang);
+            $total = $barang->jumblah - $barangMasuk->jumblah;
+            Barang::where('id', $barangMasuk->id_barang)->update([
+                'jumblah' => $total
+            ]);
+            $barangMasuk->delete();
             return response()->json(true);
         } else {
             return response()->json(true);

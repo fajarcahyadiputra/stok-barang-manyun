@@ -1,5 +1,5 @@
 @extends('admin.layout')
-@section('title','Halaman Supplier')
+@section('title','Halaman Barang')
 @section('content')
 <!-- Container Fluid-->
 <div class="container-fluid" id="container-wrapper">
@@ -16,9 +16,10 @@
                 <table class="table table-bordered table-striped table-hover" id="datatable">
                     <thead>
                         <tr>
-                            <th>No</th>
+                            <th >No</th>
                             <th>Nama</th>
-                            <th>Jumblah</th>
+                            {{-- <th>Jumlah Awal</th> --}}
+                            <th>Jumlah</th>
                             <th>Keterangan</th>
                             <th>Satuan</th>
                             @if(auth()->user()->role == 'super-admin')
@@ -31,6 +32,7 @@
                         <tr>
                             <td>{{$no+1}}</td>
                             <td>{{$dt->nama_barang}}</td>
+                            {{-- <td>{{$dt->stok_awal}}</td> --}}
                             <td>{{$dt->jumblah}}</td>
                             <td>{{$dt->keterangan}}</td>
                             <td>{{$dt->satuan}}</td>
@@ -68,15 +70,15 @@
                 <div class="modal-body">
                     <div class="form-group">
                         <label for="kode_barang">Kode Barang</label>
-                        <input type="type" readonly value="{{$kode_barang}}" name="kode_barang" id="kode_barang" class="form-control">
+                        <input required type="type" readonly value="{{$kode_barang}}" name="kode_barang" id="kode_barang" class="form-control">
                     </div>
                     <div class="form-group">
                         <label for="nama">Nama</label>
-                        <input type="type" name="nama_barang" id="nama" class="form-control">
+                        <input required type="type" name="nama_barang" id="nama" class="form-control">
                     </div>
                     <div class="form-group">
-                        <label for="jumblah">Jumblah</label>
-                        <input type="type" name="jumblah" id="jumblah" class="form-control">
+                        <label for="jumblah">Jumlah</label>
+                        <input required type="type" name="jumblah" id="jumblah" class="form-control">
                     </div>
                     <div class="form-group">
                         <label for="keterangan">Keterangan</label>
@@ -84,7 +86,7 @@
                     </div>
                     <div class="form-group">
                         <label for="satuan">Satuan</label>
-                        <select name="satuan" class="form-control" id="satuan">
+                        <select required name="satuan" class="form-control" id="satuan">
                             <option value="" disabled hidden selected>-- Pilih Satuan --</option>
                             <option value="pcs">pcs</option>
                             <option value="btg">btg</option>
@@ -269,8 +271,12 @@
                         <input type="hidden" id="id" value="${hasil.id}" >
                     </div>
                     <div class="form-group">
-                        <label for="jumblah">Jumblah</label>
-                        <input type="type" name="jumblah" id="jumblah" value="${hasil.jumblah}" class="form-control">
+                        <label for="stok_awal">Stok Awal</label>
+                        <input type="number" name="stok_awal" id="stok_awal" value="${hasil.stok_awal}" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label for="jumblah">Jumlah</label>
+                        <input type="number" name="jumblah" id="jumblah" value="${hasil.jumblah}" class="form-control">
                     </div>
                     <div class="form-group">
                         <label for="keterangan">Keterangan</label>

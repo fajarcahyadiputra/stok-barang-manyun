@@ -7,7 +7,7 @@
     <div class="card mb-3">
         <div class="card-header d-flex justify-content-between">
             <h5>DATA BARANG KELUAR</h5>
-            @if (auth()->user()->role === 'gudang')
+            @if (auth()->user()->role === 'gudang' OR auth()->user()->role === 'super-admin')
             <a class="btn btn-primary"  href="{{route('tambah.barang-keluar')}}">Tambah</a>
             @endif
         </div>
@@ -19,10 +19,8 @@
                             <th>No</th>
                             <th>Nomer PO</th>
                             <th>Nomer SJ</th>
-                            <th>Barang</th>
-                            <th>Supplier</th>
-                            <th>Jumblah</th>
-                            <th>TGL Masuk</th>
+                            <th>Customer</th>
+                            <th>TGL Keluar</th>
                             <th>Action</th>
                         </tr>
                     </thead>
@@ -32,18 +30,16 @@
                             <td>{{$no+1}}</td>
                             <td>{{$dt->no_po}}</td>
                             <td>{{$dt->no_surat_jalan}}</td>
-                            <td>{{$dt->Barang->nama_barang}}</td>
                             <td>{{$dt->Customer->nama}}</td>
-                            <td>{{$dt->jumblah}}</td>
                             <td>{{$dt->created_at}}</td>
                             <td class="text-center">
-                                @if (auth()->user()->role === 'admin')
+                                @if (auth()->user()->role === 'admin' OR auth()->user()->role === 'super-admin')
                                 <a target="_blank" href="{{route('suratjalan.barang-keluar', ['id' => $dt->id])}}" id="btn-edit" class="btn btn-warning btn-sm"><i class="fa fa-print"></i></a>
                                 @endif
-                                @if (auth()->user()->role === 'gudang')
-                                <a href="{{route('edit.barang-keluar', ['id' => $dt->id])}}" id="btn-edit" class="btn btn-primary btn-sm"><i class="fa fa-edit"></i></a>
+                                @if (auth()->user()->role === 'gudang' OR auth()->user()->role === 'super-admin')
+                                {{-- <a href="{{route('edit.barang-keluar', ['id' => $dt->id])}}" id="btn-edit" class="btn btn-primary btn-sm"><i class="fa fa-edit"></i></a> --}}
                                 <button data-id="{{$dt->id}}" id="btn-hapus" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></button>
-                                <button data-id="{{$dt->id}}" id="btn-detail" class="btn btn-info btn-sm"><i class="fa fa-info"></i></button>
+                                <a href="/detail-barang-keluar/{{$dt->id}}"  class="btn btn-info btn-sm"><i class="fa fa-info"></i></a>
                                 @endif
                             </td>
                         </tr>
@@ -64,7 +60,7 @@
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Edit Data</h5>
+                <h5 class="modal-title" id="exampleModalLabel">Detail</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>

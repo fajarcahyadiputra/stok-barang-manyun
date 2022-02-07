@@ -15,12 +15,12 @@
                     <thead>
                         <tr>
                             <th>No</th>
-                            <th>Nomer PO</th>
+                            <!-- <th>Nomer PO</th> -->
                             <th>Nomer SJ</th>
                             <th>Barang</th>
-                            <th>Customer</th>
-                            <th>Yang Mengeluarkan</th>
-                            <th>TGL Keluar</th>
+                            <th>Supplier</th>
+                            <th>Jumlah</th>
+                            <th>TGL Masuk</th>
                             <th>Action</th>
                         </tr>
                     </thead>
@@ -28,7 +28,7 @@
                         @foreach($barang_masuk as $no=>$dt)
                         <tr>
                             <td>{{$no+1}}</td>
-                            <td>{{$dt->no_po}}</td>
+                            <!-- <td>{{$dt->no_po}}</td> -->
                             <td>{{$dt->no_surat_jalan}}</td>
                             <td>{{$dt->Barang->nama_barang}}</td>
                             <td>{{$dt->Supplier->nama}}</td>
@@ -57,7 +57,7 @@
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Edit Data</h5>
+                <h5 class="modal-title" id="exampleModalLabel">Detail Data</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -143,10 +143,6 @@
                     $(`.detail-barang`).html(`
                     <div class="modal-body">
                     <div class="form-group">
-                        <label for="no_po">Nomer PO</label>
-                        <input readonly required name="no_po" id="no_po" value="${hasil.no_po}" class="form-control">
-                    </div>
-                    <div class="form-group">
                         <label for="no_surat_jalan">Nomer Surat Jalan</label>
                         <input readonly required value="${hasil.no_surat_jalan}"  class="form-control">
                     </div>
@@ -163,15 +159,15 @@
                         <input readonly required value="${hasil.penerima}"  class="form-control">
                     </div>
                     <div class="form-group">
-                        <label>Jumblah Masuk</label>
+                        <label>Jumlah Masuk</label>
                         <input readonly required value="${hasil.jumblah}"  class="form-control">
                     </div>
                     <div class="form-group">
-                        <label>Jumblah Sebelumnya</label>
+                        <label>Jumlah Sebelumnya</label>
                         <input readonly required value="${hasil.jumblah_sebelumnya}"  class="form-control">
                     </div>
                     <div class="form-group">
-                        <label>Jumblah Setelahnya</label>
+                        <label>Jumlah Setelahnya</label>
                         <input readonly required value="${hasil.total_stok}"  class="form-control">
                     </div>
                     <div class="form-group">

@@ -10,7 +10,7 @@ class BarangMasuk extends Model
 {
     use HasFactory;
     protected $table = 'barang_masuk';
-    protected $fillable = ['id_barang', 'id_supplier', 'no_po', 'satuan', 'jumblah', 'jumblah_sebelumnya', 'total_stok', 'no_surat_jalan', 'penerima'];
+    protected $fillable = ['id_barang', 'id_supplier', 'satuan', 'jumblah', 'jumblah_sebelumnya', 'total_stok', 'no_surat_jalan', 'penerima'];
     protected $casts = [
         'created_at' => 'datetime:Y-m-d H:i:s',
         'updated_at' => 'datetime:Y-m-d H:i:s',

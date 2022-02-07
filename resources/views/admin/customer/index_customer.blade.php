@@ -1,5 +1,5 @@
 @extends('admin.layout')
-@section('title','Halaman Supplier')
+@section('title','Halaman Customer')
 @section('content')
 <!-- Container Fluid-->
 <div class="container-fluid" id="container-wrapper">

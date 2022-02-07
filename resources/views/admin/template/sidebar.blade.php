@@ -5,36 +5,36 @@
             href="/">
             <div class="sidebar-brand-text mx-2 ">POS</div>
         </a>
-        <li class="nav-item p-2" style="font-size: 15px">
-            <center><b><p style="font-size: 10px">PT. CITRA LANGGENG SENTOSA</p></b></center>
+        <li class="nav-item p-2" style="font-size: 15px"> 
+            <center><b><p style="font-size: 12px">PT. CITRA LANGGENG SENTOSA</p></b></center>
         </li>
         <hr class="sidebar-divider">
         <li class="nav-item {{ request()->is('home') ? 'active' : '' }}">
-            <a class="nav-link {{ request()->is('home') ? 'text-primary' : '' }}" href="/home">
+            <a {!! request()->is('home') ? 'style="color: skyblue; !important"' : '' !!} class="nav-link"  href="/home" >
                 <i class="fas fa-fw fa-tachometer-alt"></i>
                 <span>Dashboard</span></a>
         </li>
-        @if (auth()->user()->role === 'super-admin')
+
         <hr class="sidebar-divider">
 
         <li class="nav-item {{ request()->is('user') ? 'active' : '' }}">
-            <a class="nav-link {{ request()->is('user') ? 'text-primary' : '' }}" href="/user">
+            <a {!! request()->is('user') ? 'style="color: skyblue; !important"' : '' !!} class="nav-link" href="/user">
                 <i class="fas fa-users"></i>
                 <span>Data Pengguna</span></a>
         </li>
 
         <hr class="sidebar-divider">
-
+        @can('view-barang')
         <li class="nav-item {{ request()->is('barang') ? 'active' : '' }}">
-            <a class="nav-link {{ request()->is('barang') ? 'text-primary' : '' }}" href="/barang">
+            <a {!! request()->is('barang') ? 'style="color: skyblue; !important"' : '' !!} class="nav-link" href="/barang">
                 <i class="fas fa-sitemap"></i>
                 <span>Barang</span></a>
         </li>
-
+        @endcan
         <hr class="sidebar-divider">
 
         <li class="nav-item {{ request()->is('supplier') ? 'active' : '' }}">
-            <a class="nav-link {{ request()->is('supplier') ? 'text-primary' : '' }}" href="/supplier">
+            <a {!! request()->is('supplier') ? 'style="color: skyblue; !important"' : '' !!} class="nav-link" href="/supplier">
                 <i class="fas fa-boxes"></i>
                 <span>Supplier</span></a>
         </li>
@@ -43,7 +43,7 @@
         <hr class="sidebar-divider">
 
         <li class="nav-item {{ request()->is('customer') ? 'active' : '' }}">
-            <a class="nav-link {{ request()->is('customer') ? 'text-primary' : '' }}" href="/customer">
+            <a {!! request()->is('customer') ? 'style="color: skyblue; !important"' : '' !!} class="nav-link" href="/customer">
                 <i class="fas fa-boxes"></i>
                 <span>Customer</span></a>
         </li>
@@ -57,8 +57,8 @@
         </a>
         <div id="collapseBootstrap" class="collapse" aria-labelledby="headingBootstrap" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
-            <a class="collapse-item {{ request()->is('barang-masuk') ? 'text-primary' : '' }}" href="/barang-masuk">Barang Masuk</a>
-            <a class="collapse-item {{ request()->is('barang-keluar') ? 'text-primary' : '' }}" href="/barang-keluar">Barang Keluar</a>
+            <a {!! request()->is('barang-masuk') ? 'style="color: skyblue; !important"' : '' !!} class="collapse-item" href="/barang-masuk">Barang Masuk</a>
+            <a {!! request()->is('barang-masuk') ? 'style="color: skyblue; !important"' : '' !!} class="collapse-item" href="/barang-keluar">Barang Keluar</a>
             </div>
         </div>
         </li> 
@@ -72,9 +72,15 @@
         </li>
 
         <hr class="sidebar-divider">
-        @endif
 
-        @if (auth()->user()->role === 'sales')
+        <li class="nav-item {{ request()->is('role-permision') ? 'active' : '' }}">
+            <a class="nav-link {{ request()->is('role-permision') ? 'text-primary' : '' }}" href="/role-permision">
+                <i class="fas fa-boxes"></i>
+                <span>Role & Permission</span></a>
+        </li>
+
+
+        {{-- @if (auth()->user()->role === 'sales')
         <hr class="sidebar-divider">
 
         <li class="nav-item {{ request()->is('customer') ? 'active' : '' }}">
@@ -163,7 +169,7 @@
                     <span>laporan</span></a>
             </li>
             <hr class="sidebar-divider">
-        @endif
+        @endif --}}
 
         <div class="version" id="version-ruangadmin"></div>
     </ul>

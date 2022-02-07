@@ -29,7 +29,7 @@
                             <td>{{$no+1}}</td>
                             <td>{{$dt->nama}}</td>
                             <td>{{$dt->email}}</td>
-                            <td>{{$dt->role}}</td>
+                            <td>{{$dt->roleUser->role->name}}</td>
                             <td>{{$dt->status_aktif}}</td>
                             <td><img width="150" src="{{env('APP_URL').$dt->avatar}}" alt="user image"></td>
                             <td class="text-center">
@@ -71,12 +71,12 @@
                         <input type="type" name="email" id="email" class="form-control">
                     </div>
                     <div class="form-group">
-                        <label for="level">Level</label>
-                        <select name="level" id="level" class="custom-select">
+                        <label for="role">Role</label>
+                        <select name="role" id="role" class="custom-select">
                             <option value="" disabled hidden selected>-- Piliih Role --</option>
-                            <option value="admin">Admin</option>
-                            <option value="gudang">gudang</option>
-                            <option value="sales">Sales</option>
+                           @foreach ($roles as $role)
+                               <option value="{{$role->name}}">{{$role->name}}</option>
+                           @endforeach
                         </select>
                     </div>
                     <div class="form-group">
@@ -303,7 +303,7 @@
                         <label for="Role">Role</label>
                         <select name="role" id="role" class="custom-select">
                             <option value="" disabled hidden selected>-- Piliih Role --</option>
-                            <option ${hasil.role === 'gudang'?'selected':''} value="gudang">Super Admin</option>
+                            <option ${hasil.role === 'gudang'?'selected':''} value="gudang">Gudang</option>
                             <option ${hasil.role === 'admin'?'selected':''} value="admin">Admin</option>
                             <option ${hasil.role === 'sales'?'selected':''} value="sales">Sales</option>
                         </select>
@@ -363,10 +363,8 @@
                 contentType: false,
                 cache: false,
                 async: true,
-                method: "PUT",
+                method: "POST",
                 success: function(hasil) {
-                    console.log(hasil);
-                    return false;
                     if (hasil) {
                         $('#modalEdit').modal('hide');
                         Swal.fire(

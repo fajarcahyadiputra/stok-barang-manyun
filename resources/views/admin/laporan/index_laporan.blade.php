@@ -13,11 +13,11 @@
                 @csrf
                 <div class="form-group">
                     <label for="dari">Dari</label>
-                    <input type="date" required name="dari" id="dari" class="form-control">
+                    <input type="date"  name="dari" id="dari" class="form-control">
                 </div>
                 <div class="form-group">
                     <label for="sampai">Sampai</label>
-                    <input required type="date" name="sampai" id="sampai" class="form-control">
+                    <input  type="date" name="sampai" id="sampai" class="form-control">
                 </div>
                 <div class="form-group">
                     <label for="laporan">Sampai</label>
@@ -25,6 +25,7 @@
                        <option value="" disabled hidden selected>-- Pilih Laporan --</option>
                        <option value="masuk">Barang Masuk</option>
                        <option value="keluar">Barang Keluar</option>
+                       <option value="stok-akhir">Stok Akhir</option>
                    </select>
                 </div>
                 <button class="btn btn-success" type="submit">Save</button>

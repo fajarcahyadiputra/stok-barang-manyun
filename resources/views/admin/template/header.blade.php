@@ -9,7 +9,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}" />
     <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
     <meta name="author" content="">
-    <link href="{{ URL::asset('assets/ruangAdmin/img/logo/logo.png') }}" rel="icon">
+    <link href="{{ URL::asset('assets/ruangAdmin/img/logo/LOGO_CLS.jfif') }}" rel="icon">
     <title>@yield('title')</title>
     <!-- jquery -->
     <script src="{{ URL::asset('assets/ruangAdmin/vendor/jquery/jquery.min.js') }}"></script>

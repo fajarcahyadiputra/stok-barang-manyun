@@ -10,7 +10,7 @@ class Barang extends Model
 {
     use HasFactory;
     protected $table = 'barang';
-    protected $fillable = ['nama_barang', 'jumblah', 'keterangan', 'satuan'];
+    protected $fillable = ['nama_barang', 'kode_barang', 'jumblah', 'keterangan', 'satuan', 'stok_awal'];
     protected $casts = [
         'created_at' => 'datetime:Y-m-d H:i:s',
         'updated_at' => 'datetime:Y-m-d H:i:s',
@@ -25,5 +25,13 @@ class Barang extends Model
             $kode_interval =  1;
         }
         return 'BRG' . str_pad($kode_interval, 4, '0', STR_PAD_LEFT);
+    }
+    public function barangKeluar()
+    {
+        return $this->hasMany(DetailBarangkeluar::class, 'id_barang');
+    }
+    public function barangMasuk()
+    {
+        return $this->hasMany(BarangMasuk::class, 'id_barang');
     }
 }

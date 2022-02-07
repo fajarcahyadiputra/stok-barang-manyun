@@ -20,6 +20,7 @@ class OrderController extends Controller
     public function store(Request $request)
     {
         $data = $request->except('_token');
+        $data['status'] = 'pending';
         $create = Order::create($data);
         if ($create) {
             return response()->json(true);
@@ -71,6 +72,19 @@ class OrderController extends Controller
         $order = Order::find($id);
         $data = $request->except('_token');
         $data['status'] = 'stok-kosong';
+        $order->fill($data);
+        if ($order->save()) {
+            return response()->json(true);
+        } else {
+            return response()->json(false);
+        }
+    }
+    public function closeOrder($id)
+    {
+        $order = Order::find($id);
+        $data = request()->except('_token');
+        $data['status'] = 'close';
+        $data['keterangan'] = 'order close';
         $order->fill($data);
         if ($order->save()) {
             return response()->json(true);

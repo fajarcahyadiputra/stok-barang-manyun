@@ -6,8 +6,10 @@ use App\Models\Barang;
 use App\Models\BarangKeluar;
 use App\Models\BarangMasuk;
 use App\Models\Customer;
+use App\Models\DetailBarangkeluar;
 use App\Models\Supplier;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class BarangKeluarController extends Controller
 {
@@ -18,7 +20,7 @@ class BarangKeluarController extends Controller
      */
     public function index()
     {
-        $barang_keluar = BarangKeluar::with('customer', 'barang')->get();
+        $barang_keluar = BarangKeluar::with('customer')->get();
         // $kode_barang = Barang::generateKode();
         return view('admin.barang_keluar.index_barang_keluar', compact('barang_keluar'));
     }
@@ -39,23 +41,46 @@ class BarangKeluarController extends Controller
         }
         $data = $request->except('_token', 'tgl_keluar');
         $data['created_at'] = $request->input('tgl_keluar') . date('H:m:i');
-        $barang = Barang::find($data['id_barang']);
-        $create = BarangKeluar::create($data);
-        $barang->fill([
-            'jumblah' =>  $barang->jumblah - $data['jumblah']
-        ]);
-        if ($create) {
-            $barang->save();
+        try {
+            $create = BarangKeluar::create($data);
+            if (request()->session()->exists('databarang')) {
+                foreach (request()->session()->get('databarang') as $key => $br) {
+                    $barang = Barang::find($br['id_barang']);
+                    $barang->fill([
+                        'jumblah' =>  $barang->jumblah - $br['jumlahMasuk']
+                    ]);
+                    $barang->save();
+                    DetailBarangkeluar::create([
+                        'id_barang_keluar' => $create->id,
+                        'id_barang' => $br['id_barang'],
+                        'satuan' => $br['satuan'],
+                        'sisa_stok' => $br['sisaStok'],
+                        'jumblah_sebelumnya' => $br['stokSebelumnya'],
+                        'jumblah' => $br['jumlahMasuk']
+                    ]);
+                }
+            }
+            DB::commit();
+            request()->session()->forget('databarang');
             return response()->json(true);
-        } else {
+        } catch (\Throwable $th) {
+            DB::rollBack();
             return response()->json(false);
         }
     }
     public function destroy($id)
     {
-        $barang = BarangKeluar::find($id);
-        if ($barang) {
-            $barang->delete();
+        $barangKeluar = BarangKeluar::find($id);
+        if ($barangKeluar) {
+            foreach (DetailBarangkeluar::where('id_barang_keluar', $barangKeluar->id)->get() as $detail) {
+                $barang = Barang::find($detail->id_barang);
+                $total = $barang->jumblah + $detail->jumblah;
+                Barang::where('id', $detail->id_barang)->update([
+                    'jumblah' => $total
+                ]);
+            }
+            DetailBarangkeluar::where('id_barang_keluar', $barangKeluar->id)->delete();
+            $barangKeluar->delete();
             return response()->json(true);
         } else {
             return response()->json(true);
@@ -87,7 +112,27 @@ class BarangKeluarController extends Controller
     }
     public function laporanSuratjalan($id)
     {
-        $barang_keluar = BarangKeluar::with('barang', 'customer')->find($id);
-        return view('admin.barang_keluar.surat_jalan', compact('barang_keluar'));
+        $barang_keluar = BarangKeluar::with('customer')->find($id);
+        $detailKeluar = DetailBarangkeluar::with('barang')->where('id_barang_keluar', $barang_keluar->id)->get();
+        return view('admin.barang_keluar.surat_jalan', compact('barang_keluar', 'detailKeluar'));
+    }
+    public function addCart()
+    {
+        $dataBarang = request()->except("_token");
+        $barang = Barang::find($dataBarang['id_barang']);
+        $dataBarang['kode_barang'] = $barang->kode_barang;
+        $dataBarang['nama_barang'] = $barang->nama_barang;
+        if (request()->session()->exists('databarang') && !empty(session()->get('databarang'))) {
+            request()->session()->push('databarang', $dataBarang);
+        } else {
+            request()->session()->put('databarang', []);
+            request()->session()->push('databarang', $dataBarang);
+        }
+        return response(true);
+    }
+    public function viewDetailBarangKeluar($id)
+    {
+        $detailKeluar = DetailBarangkeluar::with('barang')->where('id_barang_keluar', $id)->get();
+        return view('admin.barang_keluar.detailkeluar', compact('detailKeluar'));
     }
 }

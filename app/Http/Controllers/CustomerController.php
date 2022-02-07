@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Customer;
 use Illuminate\Http\Request;
+use App\Models\BarangKeluar;
 
 class CustomerController extends Controller
 {
@@ -33,6 +34,7 @@ class CustomerController extends Controller
         $customer = Customer::find($id);
         if ($customer) {
             $customer->delete();
+            BarangKeluar::where('id_customer', $id)->delete();
             return response()->json(true);
         } else {
             return response()->json(true);

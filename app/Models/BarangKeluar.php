@@ -15,10 +15,6 @@ class BarangKeluar extends Model
         'created_at' => 'datetime:Y-m-d H:i:s',
         'updated_at' => 'datetime:Y-m-d H:i:s',
     ];
-    public function barang()
-    {
-        return $this->belongsTo(Barang::class, 'id_barang');
-    }
     public function customer()
     {
         return $this->belongsTo(Customer::class, 'id_customer');
@@ -32,7 +28,7 @@ class BarangKeluar extends Model
         } else {
             $kode_interval =  1;
         }
-        return 'BPO' . str_pad($kode_interval, 4, '0', STR_PAD_LEFT);
+        return 'PO-' . str_pad($kode_interval, 4, '0', STR_PAD_LEFT);
     }
     public static function generateSJ()
     {
@@ -43,15 +39,6 @@ class BarangKeluar extends Model
         } else {
             $kode_interval =  1;
         }
-        return 'SJB' . str_pad($kode_interval, 4, '0', STR_PAD_LEFT);
-    }
-    public static function laporan($dari, $sampai)
-    {
-        return DB::table('barang_keluar')
-            ->select("barang_keluar.*", "barang.nama_barang", "customer.nama")
-            ->join('barang', "barang_keluar.id_barang", "=", "barang.id")
-            ->join('customer', "barang_keluar.id_customer", "=", "customer.id")
-            ->whereBetween('barang_keluar.created_at', [$dari, $sampai])
-            ->get();
+        return 'CLS-' . str_pad($kode_interval, 4, '0', STR_PAD_LEFT);
     }
 }

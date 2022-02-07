@@ -15,12 +15,13 @@ class CreateBarangMasukTable extends Migration
     {
         Schema::create('barang_masuk', function (Blueprint $table) {
             $table->id();
-            $table->integer('id_barang');
-            $table->integer('id_supplier');
-            $table->string('no_po', 100);
+            $table->bigInteger('id_barang');
+            $table->bigInteger('id_supplier');
             $table->enum('satuan', ['pcs', 'lb', 'btg']);
             $table->integer('jumblah');
-            $table->string('no_surat_jalan', 100);
+            $table->string('no_surat_jalan', 10);
+            $table->integer('jumblah_sebelumnya');
+            $table->integer('total_stok');
             $table->string('penerima', 100);
             $table->timestamps();
         });

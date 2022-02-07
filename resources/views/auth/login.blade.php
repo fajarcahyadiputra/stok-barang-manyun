@@ -9,8 +9,8 @@
     <meta name="description" content="aplikasi bengkel shop">
     <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
     <meta name="author" content="">
-    <link href="{{URL::asset('assets/ruangAdmin/img/logo/logo.png')}}" rel="icon">
-    <title>SPB || Login Page</title>
+    <link href="{{URL::asset('assets/ruangAdmin/img/logo/LOGO_CLS.jfif')}}" rel="icon">
+    <title>CLS || Login Page</title>
     <link href="{{URL::asset('assets/ruangAdmin/vendor/fontawesome-free/css/all.min.css')}}" rel="stylesheet" type="text/css">
     <link href="{{URL::asset('assets/ruangAdmin/vendor/bootstrap/css/bootstrap.min.css')}}" rel="stylesheet" type="text/css">
     <link href="{{URL::asset('assets/ruangAdmin/css/ruang-admin.min.css')}}" rel="stylesheet">

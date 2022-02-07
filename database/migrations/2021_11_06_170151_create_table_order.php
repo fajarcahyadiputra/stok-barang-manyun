@@ -13,16 +13,16 @@ class CreateTableOrder extends Migration
      */
     public function up()
     {
-        Schema::create('order_barang', function (Blueprint $table) {
-            $table->id();
-            $table->string('invoice', 50);
-            $table->bigInteger('id_barang');
-            $table->bigInteger('id_customer');
-            $table->integer('jumblah');
-            $table->enum('status', ['stok-tersedia', 'stok-kosong', 'dikirim', 'selesai']);
-            $table->text('keterangan');
-            $table->timestamps();
-        });
+        // Schema::create('order_barang', function (Blueprint $table) {
+        //     $table->id();
+        //     $table->string('invoice', 50);
+        //     $table->bigInteger('id_barang');
+        //     $table->bigInteger('id_customer');
+        //     $table->integer('jumblah');
+        //     $table->enum('status', ['stok-tersedia', 'stok-kosong', 'dikirim', 'selesai']);
+        //     $table->text('keterangan');
+        //     $table->timestamps();
+        // });
     }
 
     /**
@@ -32,6 +32,6 @@ class CreateTableOrder extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('order_barang');
+        // Schema::dropIfExists('order_barang');
     }
 }

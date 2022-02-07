@@ -56,12 +56,12 @@
                         </select>
                     </div>
                     <div class="form-group">
-                        <label>Jumblah</label>
+                        <label>Jumlah</label>
                         <input required type="number" value="{{$barangkeluar->jumblah}}" name="jumblah" id="jumblah" min="1" value="" class="form-control">
                         <span class="alert-barang-kosong text-danger"></span>
                     </div>
                     <div class="form-group">
-                        <label>Jumblah Sebelumnya</label>
+                        <label>Jumlah Sebelumnya</label>
                         <input readonly type="number" value="{{$barangkeluar->jumblah_sebelumnya}}" name="jumblah_sebelumnya" id="jumblah_sebelumnya" min="1" class="form-control">
                     </div>
                     <div class="form-group">

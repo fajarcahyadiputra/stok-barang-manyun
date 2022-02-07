@@ -15,14 +15,9 @@ class CreateBarangKeluarTable extends Migration
     {
         Schema::create('barang_keluar', function (Blueprint $table) {
             $table->id();
-            $table->integer('id_barang');
             $table->integer('id_customer');
-            $table->string('no_po');
-            $table->string('no_surat_jalan');
-            $table->enum('satuan', ['pcs', 'lb', 'btg']);
-            $table->integer('jumblah');
-            $table->integer('sisa_stok');
-            $table->integer('jumblah_sebelumnya');
+            $table->string('no_po', 10);
+            $table->string('no_surat_jalan', 10);
             $table->string('yg_mengeluarkan', 100);
             $table->timestamps();
         });

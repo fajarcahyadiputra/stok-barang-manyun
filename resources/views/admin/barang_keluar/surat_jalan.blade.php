@@ -20,6 +20,10 @@
                 <div class="row">
                     <div class="col-md-6">
                         <div class="form-group">
+                            <label for="">No PO</label>
+                            <input readonly required type="text" value="{{$barang_keluar->no_po}}" name="noSuratJalan" class="form-control">
+                        </div>
+                        <div class="form-group">
                             <label for="">No Suarat Jalan</label>
                             <input readonly required type="text" value="{{$barang_keluar->no_surat_jalan}}" name="noSuratJalan" class="form-control">
                         </div>
@@ -31,7 +35,8 @@
                     </div>
                     <div class="col-md-6">
                         <div class="form-group">
-    
+                            <label for="">Customer</label>
+                            <input readonly class="form-control" type="text" readonly value="{{$barang_keluar->Customer->nama}}">
                         </div>
                         <div class="form-group">
                             <label for="">Tanggal Pengiriman</label>
@@ -40,13 +45,7 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-md-3">
-                        <div class="form-group">
-                            <label for="">Customer</label>
-                            <input readonly class="form-control" type="text" readonly value="{{$barang_keluar->Customer->nama}}">
-                        </div>
-                    </div>
-                    <div class="col-md-9">
+                    <div class="col-md-12">
                         <div class="form-group">
                             <label for="">Alamat Customer</label>
                             <textarea readonly required class="form-control" name="alamatCustomer" id="alamatCustomer" cols="20" rows="1">{{$barang_keluar->Customer->alamat}}</textarea>
@@ -58,19 +57,19 @@
                     <table class="table mt-4">
                         <thead>
                             <tr>
-                                <th>No PO</th>
                                 <th>Kode Part</th>
-                                <th>Barang</th>
-                                <th>Jumblah</th>
+                                <th>Nama Barang</th>
+                                <th>Jumlah</th>
                             </tr>
                         </thead>
                         <tbody>
+                            @foreach ($detailKeluar as $item)
                             <tr>
-                                <td>{{$barang_keluar->no_po}}</td>
-                                <td>{{$barang_keluar->Barang->kode_barang}}</td>
-                                <td>{{$barang_keluar->Barang->nama_barang}}</td>
-                                <td>{{$barang_keluar->jumblah}}</td>
+                                <td>{{$item->Barang->kode_barang}}</td>
+                                <td>{{$item->Barang->nama_barang}}</td>
+                                <td>{{$item->jumblah}}</td>
                             </tr>
+                            @endforeach
                         </tbody>
                     </table>
                 </div>
@@ -85,7 +84,7 @@
             {{-- <hr style="border-bottom: dotted;"> --}}
         </div>
         <div class="tdd-left">
-            <p style="margin-bottom: 100px; ">Mengetahua</p>
+            <p style="margin-bottom: 100px; ">Mengetahui</p>
             {{-- <hr style="border-bottom: dotted;"> --}}
             <p style="margin-bottom: 0px">Sales Manager</p>
         </div>

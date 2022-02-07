@@ -22,9 +22,7 @@
                             <th>Jumblah</th>
                             <th>Status</th>
                             <th>Keterangan</th>
-                            @if (auth()->user()->role != 'admin')
                             <th>Action</th>
-                            @endif
                         </tr>
                     </thead>
                     <tbody>
@@ -36,6 +34,9 @@
                             <td>{{$dt->jumblah}}</td>
                             <td><span style="background-color: green; padding: 5px; border-radius: 20px; color: white">{{$dt->status}}</span></td>
                             <td>{{$dt->keterangan}}</td>
+                            @if (auth()->user()->role === 'admin')
+                            <td><button data-id="{{$dt->id}}" id="btn-close" class="btn btn-success btn-sm"><i class="fas fa-tasks"></i></button></td>
+                            @endif
                             @if (auth()->user()->role === 'sales')
                             <td class="text-center">
                                 <button data-id="{{$dt->id}}" id="btn-edit" class="btn btn-primary btn-sm"><i class="fa fa-edit"></i></button>
@@ -97,7 +98,7 @@
                         </select>
                     </div>
                     <div class="form-group">
-                        <label for="jumblah">Jumblah</label>
+                        <label for="jumblah">Jumlah</label>
                         <input required type="type" name="jumblah" id="jumblah" class="form-control">
                     </div>
                     <div class="form-group">
@@ -403,6 +404,38 @@
             const id = $('#id').val();
             $.ajax({
                 url: '/order/stok-notready/'+id,
+                data: $(this).serialize(),
+                dataType: 'json',
+                method: "PUT",
+                success: function(hasil) {
+                    if (hasil) {
+                        $('#modalEdit').modal('hide');
+                        Swal.fire(
+                            'sukses',
+                            'sukses edit data',
+                            'success'
+                        )
+                    } else {
+                        Swal.fire(
+                            'Gagal',
+                            'gagal edit data',
+                            'error'
+                        )
+                    }
+                    setTimeout(() => {
+                        location.reload();
+                    }, 800);
+                }
+            })
+        })
+        //end
+        //aksi close
+        $(document).on('click', '#btn-close', function(e){
+            e.preventDefault();
+            const id = $(this).data('id');
+            console.log(id);
+            $.ajax({
+                url: '/order/order-close/'+id,
                 data: $(this).serialize(),
                 dataType: 'json',
                 method: "PUT",

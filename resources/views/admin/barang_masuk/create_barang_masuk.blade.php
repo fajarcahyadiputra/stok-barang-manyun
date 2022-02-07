@@ -12,13 +12,13 @@
             <form id="formTambah" method="post">
                 @csrf()
                 <div class="modal-body">
-                    <div class="form-group">
+                    <!-- <div class="form-group">
                         <label for="no_po">Nomer PO</label>
-                        <input required type="type" value="" name="no_po" id="no_po" class="form-control">
-                    </div>
+                        <input required autocomplete="off" type="type" value="" name="no_po" id="no_po" class="form-control">
+                    </div> -->
                     <div class="form-group">
                         <label for="no_surat_jalan">Nomer Surat Jalan</label>
-                        <input required type="type" value="" name="no_surat_jalan" id="no_surat_jalan" class="form-control">
+                        <input required type="type" autocomplete="off" value="" name="no_surat_jalan" id="no_surat_jalan" class="form-control">
                     </div>
                     <div class="form-group">
                         <label for="id_barang">Barang</label>
@@ -27,6 +27,7 @@
                             @foreach ($barang as $br)
                              <option value="{{$br->id}}">{{$br->nama_barang}}</option>
                             @endforeach
+                            <option value="lainnya">Lainnya</option>
                         </select>
                     </div>
                     <div class="form-group">
@@ -36,15 +37,16 @@
                             @foreach ($supplier as $sup)
                              <option value="{{$sup->id}}">{{$sup->nama}}</option>
                             @endforeach
+                            
                         </select>
                     </div>
                     <div class="form-group">
-                        <label for="jumblah">Jumblah</label>
+                        <label for="jumblah">Jumlah</label>
                         <input required type="number" min="1" name="jumblah" id="jumblah"  value="1" class="form-control">
                         <span class="alert-barang-kosong text-danger"></span>
                     </div>
                     <div class="form-group">
-                        <label for="jumblah_sebelumnya">Jumblah Sebelumnya</label>
+                        <label for="jumblah_sebelumnya">Jumlah Sebelumnya</label>
                         <input readonly type="number" required name="jumblah_sebelumnya" id="jumblah_sebelumnya" class="form-control">
                     </div>
                     <div class="form-group">
@@ -66,7 +68,7 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <a  class="btn btn-secondary" href="/barang-masuk">Cancle</a>
+                    <a  class="btn btn-secondary" href="/barang-masuk">Cancel</a>
                     <button  id="btn-add" type="submit" class="btn btn-primary">Save</button>
                 </div>
             </form>
@@ -76,9 +78,86 @@
     
 @endsection
 
+
+@section('modal')
+    <!-- Modal tambah -->
+<div class="modal fade" id="modalTambahData" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Tambah Data</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form id="formTambahBarang" method="post">
+                @csrf()
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="kode_barang">Kode Barang</label>
+                        <input type="type" readonly value="{{$kode_barang}}" name="kode_barang" id="kode_barang" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label for="nama">Nama</label>
+                        <input type="type" name="nama_barang" id="nama" class="form-control">
+                    <!-- </div>
+                    <div class="form-group">
+                        <label for="jumblah">Jumlah</label> -->
+                        <input type="hidden" name="jumblah" id="jumblah" value="0" class="form-control">
+                    <!-- </div> -->
+                    <div class="form-group">
+                        <label for="keterangan">Keterangan</label>
+                        <textarea class="form-control" name="keterangan" id="keterangan" cols="30" rows="3"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="satuan">Satuan</label>
+                        <select name="satuan" class="form-control" id="satuan">
+                            <option value="" disabled hidden selected>-- Pilih Satuan --</option>
+                            <option value="pcs">pcs</option>
+                            <option value="btg">btg</option>
+                            <option value="lb">lb</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Save</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+@endsection
+
 @section('javascript')
     <script>
         $(document).ready(function(){
+        
+        //check if barang jika tidak ada di data barang
+        $(document).on('change', '#id_barang', function(){
+            const value = $(this).val();
+            if(value === 'lainnya'){
+                $('#modalTambahData').modal('show');
+            }
+        })
+        //end
+
+        //add data barang
+        $(document).on('submit', '#formTambahBarang',  function(e) {
+            e.preventDefault();
+            const data = $(this).serialize() + "&serviceLain="+true;
+            $.ajax({
+                url: '/barang',
+                data: data,
+                dataType: 'json',
+                type: 'post',
+                success: function(hasil) {
+                    $('#id_barang').html(`<option value="${hasil.id}">${hasil.nama_barang}</option>`);
+                    $('#modalTambahData').modal('hide');
+                }
+            })
+        })
+        //end
 
         $(document).on('submit', '#formTambah',  function(e) {
             e.preventDefault();

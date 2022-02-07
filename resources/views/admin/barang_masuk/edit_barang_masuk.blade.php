@@ -12,10 +12,10 @@
             <form id="formEditData" method="post">
                 @csrf()
                 <div class="modal-body">
-                    <div class="form-group">
+                    <!-- <div class="form-group">
                         <label for="no_po">Nomer PO</label>
                         <input type="type" required name="no_po" id="no_po" value="{{$barangmasuk->no_po}}" class="form-control">
-                    </div>
+                    </div> -->
                     <div class="form-group">
                         <label for="no_surat_jalan">Nomer Surat Jalan</label>
                         <input type="hidden" value="{{$barangmasuk->id}}" id="id">
@@ -54,7 +54,7 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <a  class="btn btn-secondary" href="/barang-masuk">Cancle</a>
+                    <a  class="btn btn-secondary" href="/barang-masuk">Cancel</a>
                     <button type="submit" class="btn btn-primary">Edit</button>
                 </div>
             </form>

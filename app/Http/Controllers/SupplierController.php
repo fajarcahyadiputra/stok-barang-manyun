@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Supplier;
 use Illuminate\Http\Request;
+use App\Models\BarangKeluar;
+use App\Models\BarangMasuk;
 
 class SupplierController extends Controller
 {
@@ -32,6 +34,7 @@ class SupplierController extends Controller
     {
         $supplier = Supplier::find($id);
         if ($supplier) {
+            BarangMasuk::where('id_supplier', $id)->delete();
             $supplier->delete();
             return response()->json(true);
         } else {

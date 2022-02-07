@@ -6,14 +6,17 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use \Spatie\Permission\Models\Role;
 
 class UserController extends Controller
 {
     public function index()
     {
-        $users = User::all();
-        return view('admin.user.index_user', compact('users'));
+        $users = User::with('roleUser.role')->get();
+        $roles = Role::all();
+        return view('admin.user.index_user', compact('users', 'roles'));
     }
+    //store membuat data baru
     public function store(Request $request)
     {
         $data = $request->except('_token');
@@ -35,6 +38,7 @@ class UserController extends Controller
                 'errors' => $validate->errors()
             ]);
         }
+        //buat upload gambar
         if ($request->hasFile('avatar')) {
             if ($request->file('avatar')->isValid()) {
                 $fileName = time() . '-' . date('M') . '.' . $request->file('avatar')->extension();
@@ -48,22 +52,23 @@ class UserController extends Controller
             'nama' => $data['nama'],
             'email' => $data['email'],
             'password' => $data['password'],
-            'role' => $data['level'],
             'avatar' => $data['avatar']
         ]);
         if ($newUser) {
+            $newUser->assignRole(request()->input('role'));
             return response()->json(true);
         } else {
             return response()->json(false);
         }
     }
+    //
     public function show($id)
     {
         return response()->json(User::find($id));
     }
     public function update($id, Request $request)
     {
-        $user = User::find($id);
+        $user = User::with('roleUser.role')->find($id);
         $rule = [
             'nama' => 'required|string',
             'email' => 'required|email',
@@ -80,18 +85,22 @@ class UserController extends Controller
         // }
         if ($request->hasFile('avatar')) {
             if ($request->file('avatar')->isValid()) {
+                if (file_exists(public_path($user->avatar) && $user->avatar != null)) {
+                    unlink(public_path($user->avatar));
+                }
                 $fileName = time() . '-' . date('M') . '.' . $request->file('avatar')->extension();
                 $request->file('avatar')->move(public_path('assets/image/user'), $fileName);
                 $data['avatar'] = "assets/image/user/$fileName";
             }
         }
-        $edit = $user->fill($data);
-        // if ($edit->save()) {
-        //     return response()->json(true);
-        // } else {
-        //     return response()->json(false);
-        // }
-        return response()->json($request->all());
+        $user->removeRole($user->roleUser->role->name);
+        $user->assignRole(request()->input('role'));
+        $user->fill($data);
+        if ($user->save()) {
+            return response()->json(true);
+        } else {
+            return response()->json(false);
+        }
     }
     public function destroy($id)
     {

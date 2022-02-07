@@ -17,7 +17,7 @@ class CreateCustomerTable extends Migration
             $table->id();
             $table->string('nama', 200);
             $table->text('alamat');
-            $table->string('nomer_tlpn');
+            $table->string('nomer_tlpn',13);
             $table->timestamps();
         });
     }

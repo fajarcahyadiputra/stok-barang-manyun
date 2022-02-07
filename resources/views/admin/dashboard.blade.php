@@ -67,7 +67,7 @@
                         <h1 align="center" style="font-weight: bold">Selamat Datang {{auth()->user()->nama}}</h1>
                     </h1>
                     <hr>
-                    <h3 align="center">Aplikasi manajemen Stok Barang<br /></h3>
+                    <h3 align="center">Aplikasi Persediaan Barang<br /></h3>
                     <h3 align="center">PT. CITRA LANGGENG SENTOSA<br /></h3>
                     <hr class="my-4">
                 </div>
